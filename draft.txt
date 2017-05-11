@@ -1,0 +1,109 @@
+
+Create a service that tells the user what types of food trucks might be found near a specific location on a map.
+
+
+
+The data in public sf data:
+
+757 data ..
+
+locationid -> number
+Applicant -> name
+FacilityType -> Truck/push_cart etc..
+cnn -> number (c'est quoi?)
+LocationDescription -> position plain text
+address: plain text
+blocklot: plaintext (c'est quoi ?)
+lot: plaintext(c'est quoi?)
+permit: numero du permis ?
+status: expired /requested/inactive  -> a quoi ca correspond
+FoodItems: tacos, burgers etc..
+X: c'est quoi ?
+Y:c'est quoi ?
+Lattitude: ok
+Longitude: ok
+Schedule: lien vers fichier pdf
+dayshours: pas toujours rempli, mais avec des horraires en format texte
+Approved : ?? une date en texte
+PriorPermit: ??
+ExpirationDate: une date en texte, pas toujours remplit
+Location: (Lattitude, Longitude) en texte et tuple
+
+
+REST API
+
+list of endpoints:
+
+ressources:
+GET /food_trucks  - get all food trucks
+PUT /food_trucks
+POST /food_trucks  - create food truck(s?)
+DELETE /food_trucks - delete
+
+
+GET /food_trucks/?fields=id,position,name&state=open&position=position&max_distance=distance - get all food trucks
+
+
+ou peut etre introduire un near: .. enfin pas indispensable pour l'instant
+
+GET /nears/?lat=...&long=..&distance=10.0
+
+
+
+
+A cron job that update the local database (from the public api of sf):
+the job could be run once a day ?
+
+Technology:
+
+- hug to get a POC in a short amount of time
+
+
+
+
+My google api key: AIzaSyAAxPWFPyioCmNZjXOqLLbyfI4tn_TzHpc
+
+
+Les donnee:
+une base redis (car peux de donner pour l'instant) .. donc no
+
+
+
+Autre features:
+
+Fournir uniquement les foodtrucks qui sont ouverts
+Ajouter une distance de parcours (à pied par exemple, en velo, en uber) -> il y a une api google pour ça
+
+Fournir des images/photos (-> utiliser un autre webservice)
+
+
+Regarder les donnee (avec pandas par exemple)
+les types de nouriture, peut etre "reformater" les types de nouriture afin d'avoir un truc plus uniforme -> avec une
+liste deroulante par exemple sur le type de bouffe
+
+Add features find the X nearest truck
+
+find walking distance truck -> peut etre faire un premier filtre avec radius * speed_human dans un premier temps, puis check avec google api
+
+
+TODO: utiliser ça: https://data.sfgov.org/Economy-and-Community/Mobile-Food-Schedule/jjew-r69b
+
+utiliser un mini algo de machine learning afin de segmenter les types de boofs en quelques catégories
+Type of Cuisine (cf ici pour avoir des categories: http://sdfoodtrucks.com/list-of-trucks/ )
+http://dl.acm.org/citation.cfm?id=2641335&dl=ACM&coll=DL&CFID=761040798&CFTOKEN=60833877 <-- regarder ca pour commencer
+
+et cette recherche google : https://www.google.fr/search?q=food+cuisine+classification&oq=food+cuisine+classification&aqs=chrome..69i57.4783j0j7&sourceid=chrome&ie=UTF-8
+
+
+
+- feature: ajouter une recherche a partir du numéro de permis, ou alors a partir du nom etc
+
+
+-- todo remonter les infos type coldtruck vs hot (peut etre mettre 2 couleurs, bleu et rouge par exemple?)
+
+
+reprendre le doc coding interview at uber:
+
+-> tests unitaires
+-> tests integration
+-> tests de performance etc

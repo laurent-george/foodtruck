@@ -1,0 +1,7 @@
+redis:
+    host: redis
+    port: 6379
+    db_num: 0
+db_keys:
+    truck_geo_data_key: "TRUCKS_POSITIONS"
+

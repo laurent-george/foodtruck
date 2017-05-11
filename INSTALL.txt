@@ -1,0 +1,11 @@
+
+
+apt-get install redis-server
+
+# TODO: faire un fichier avec dependance python
+pip install redis
+
+
+pip install hug
+
+
