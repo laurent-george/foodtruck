@@ -1,0 +1,30 @@
+---
+- test:
+    - name: "Connectivity"
+    - url: "/v1/food_trucks"
+- test:
+    - name: "Expected json content"
+    - url: "/v1/food_trucks"
+    - validators:
+        - compare: {header: "content-type", expected: "application/json"}
+- test:
+    - name: "Expected numerous trucks"
+    - url: "/v1/food_trucks?limit=10"
+    - validators:
+        - compare: {jsonpath_mini: "",     comparator: "count_eq",     expected: 10}
+- test:
+    - name: "Expeceted APPROVED"
+    - url: "/v1/food_trucks?status=APPROVED&limit=4"
+    - validators:
+        - compare: {jsonpath_mini: "0.status",     comparator: "eq",     expected: 'APPROVED'}
+        - compare: {jsonpath_mini: "1.status",     comparator: "eq",     expected: 'APPROVED'}
+        - compare: {jsonpath_mini: "2.status",     comparator: "eq",     expected: 'APPROVED'}
+        - compare: {jsonpath_mini: "3.status",     comparator: "eq",     expected: 'APPROVED'}
+- test:
+    - name: "Expected some truck in SF radius of 10km"
+    - url: "/v1/food_trucks?limit=-1&nearby=-122.4194,37.7749,10000"
+    - validators:
+        - compare: {jsonpath_mini: "0.status",     comparator: "eq",     expected: 'APPROVED'}
+        - compare: {jsonpath_mini: "1.status",     comparator: "eq",     expected: 'APPROVED'}
+        - compare: {jsonpath_mini: "2.status",     comparator: "eq",     expected: 'APPROVED'}
+        - compare: {jsonpath_mini: "3.status",     comparator: "eq",     expected: 'APPROVED'}

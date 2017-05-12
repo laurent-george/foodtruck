@@ -1,0 +1,56 @@
+arab:
+- hummu
+- falafel
+- gyro
+- lamb
+- tabouli
+- halal
+- kafta
+- couscou
+asian:
+- asian
+- vietnamese
+- roll
+- bo
+- korean
+- delhi
+- curry
+- deli
+- bobun
+- indian
+- tofu
+drinks_and_snacks:
+- fruit
+- snack
+- sandwiche
+- drink
+- pre-packaged snack
+- pre-packaged sandwiche
+- salad
+italian:
+- mozzarella
+- pizza
+- neapolitan
+- pasta
+north_american:
+- burger
+- bbq
+- pork
+- pulled
+- corn
+- hot dog
+- hamburger
+- cheeseburger
+- bacon
+- rotisserie Chicken
+- rib
+south_american:
+- enchiladaquesadilla
+- taco
+- el
+- torta
+- peruvian
+- peruvian food
+- mexican
+- nacho
+- burrito

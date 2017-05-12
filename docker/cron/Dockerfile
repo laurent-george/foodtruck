@@ -3,6 +3,7 @@ FROM python:alpine
 # TODO: use the requirements.txt
 RUN pip3 install redis
 RUN pip3 install pyyaml
+RUN pip3 install requests
 
 WORKDIR src
 

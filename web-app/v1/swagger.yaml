@@ -1,0 +1,171 @@
+swagger: '2.0'
+info:
+  description: ''
+  version: 1.0.0
+  title: SF Food trucks API.
+  contact:
+    email: laurent.f.george@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: srand.fr
+basePath: /v1
+schemes:
+  - http
+paths:
+  /food_trucks:
+    get:
+      tags:
+        - food_trucks
+      summary: Get food trucks list
+      description: >-
+        The attributes of food trucks that match the provided parameters are
+        returned
+      produces:
+        - application/json
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: false
+          type: array
+          items:
+            type: string
+            enum:
+              - APPROVED
+              - REQUESTED
+              - EXPIRED
+              - SUSPEND
+              - ISSUED
+              - INACTIVE
+            default: APPROVED
+          collectionFormat: multi
+        - name: nearby
+          in: query
+          description: >-
+            It allows to filter food trucks based on distance to a specific
+            point. [longitude, latitude, radius] where radius is in meters. If
+            provided only trucks in a circle of radius arround the (longitude,
+            latitude) point are returned. Example: -122.4194,37.7749,1000
+          required: false
+          type: array
+          items:
+            type: number
+            format: float
+        - name: cuisines
+          in: query
+          description: Cuisines that need to be considered for filter
+          required: false
+          type: array
+          items:
+            type: string
+            enum:
+              - arab
+              - north_american
+              - italian
+              - drinks_and_snacks
+              - south_american
+              - asian
+              - other
+        - name: attributes
+          in: query
+          description: Attributes to return for each food truck
+          required: false
+          type: array
+          items:
+            type: string
+            enum:
+              - truck_id
+              - name
+              - status
+              - fooditems
+              - cuisines
+              - latitude
+              - longitude
+              - schedule:Monday
+              - schedule:Tuesday
+              - schedule:Wednesday
+              - schedule:Thursday
+              - schedule:Friday
+              - schedule:Saturday
+              - schedule:Sunday
+        - name: limit
+          description: Maximum number of results to return
+          in: query
+          required: false
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/FoodTruck'
+        '400':
+          description: Invalid status value
+definitions:
+  FoodTruck:
+    type: object
+    properties:
+      truck_id:
+        type: string
+      name:
+        type: string
+        description: Brand name of the food truck
+      longitude:
+        type: number
+        format: float
+      latitude:
+        type: number
+        format: float
+      status:
+        type: string
+        description: Permit status
+        enum:
+          - APPROVED
+          - REQUESTED
+          - EXPIRED
+          - SUSPEND
+          - ISSUED
+          - INACTIVE
+      fooditems:
+        type: string
+        description: Food items available
+      cuisines:
+        type: array
+        description: Types of food cuisines available
+        items:
+          type: string
+          enum:
+            - arab
+            - north_american
+            - italian
+            - drinks_and_snacks
+            - south_american
+            - asian
+            - other
+      schedule:Monday:
+        type: string
+        description: Opening hours on Monday
+      schedule:Tuesday:
+        type: string
+        description: Opening hours on Tuesday
+      schedule:Wednesday:
+        type: string
+        description: Opening hours on Wednesday
+      schedule:Thursday:
+        type: string
+        description: Opening hours on Thursday
+      schedule:Friday:
+        type: string
+        description: Opening hours on Friday
+      schedule:Saturday:
+        type: string
+        description: Opening hours on Saturday
+      schedule:Sunday:
+        type: string
+        description: Opening hours on Sunday
+    xml:
+      name: Order

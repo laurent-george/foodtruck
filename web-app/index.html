@@ -1,45 +1,102 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Simple Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="map"></div>
-    <script>
-      var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat:  37.7749, lng: -122.4194},
-          zoom: 12
-        });
-      }
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAxPWFPyioCmNZjXOqLLbyfI4tn_TzHpc&callback=initMap"
-    async defer></script>
-  </body>
-</html>
 
-<!
-var mapContext = $(this).locationpicker('map');
-var myLatLng = {lat: -25.363, lng: 131.044};
+<head lang="en">
+    <meta charset="UTF-8">
+    <!-- Bootstrap stuff -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAxPWFPyioCmNZjXOqLLbyfI4tn_TzHpc&callback=initMap&libraries=places&sensor=false"></script>
+
+    <script src="js/locationpicker.jquery.js"></script>
+    <title>Simple example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="form-horizontal" style="width: 850px">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Radius:</label>
+
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="us3-radius" />
+            </div>
+        </div>
+        <div id="us3" style="width: 750px; height: 400px;"></div>
+        <div class="clearfix">&nbsp;</div>
+        <div class="clearfix"></div>
+        <script>
+
+            markers = [];
+
+
+            $('#us3').locationpicker({
+                location: {
+                    latitude: 37.7749,
+                    longitude: -122.4194
+                },
+                radius: 1000,
+                inputBinding: {
+                    latitudeInput: $('#us3-lat'),
+                    longitudeInput: $('#us3-lon'),
+                    radiusInput: $('#us3-radius'),
+                    locationNameInput: $('#us3-address')
+                },
+                enableAutocomplete: true,
+                onchanged: function (currentLocation, radius, isMarkerDropped) {
+
+                    // clear all previous markers
+                   for (var i = 0; i < markers.length; i++) {
+                       markers[i].setMap(null);
+                       }
+                   markers = [];
+                    apiUrl = "http://srand.fr/v1/food_trucks?status=APPROVED&nearby=" + currentLocation.longitude + "," + currentLocation.latitude + "," + radius
+                    $.getJSON( apiUrl, function( data ) {
+                      var items = [];
+                      $.each( data, function( key, value ) {
+                        items.push( "<li id='" + value.name + "'>" + value.name + "</li>" );
+
+var mapContext = $('#us3').locationpicker('map');
+var myLatLng = {lat: parseFloat(value.latitude), lng: parseFloat(value.longitude)};
 var marker = new google.maps.Marker({
+icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
 position: myLatLng,
 map: mapContext.map,
-title: 'test'
+title: value.truck_id
+
 });
--->
+
+google.maps.event.addListener(marker, 'click', function(e){
+    var infowindow = new google.maps.InfoWindow({
+      content: '<div id="content">' +
+      '<h1 id="firstHeading" class="firstHeading">' + value.name +  '</h1>' +
+      "<p>" + value.cuisines  + "</p>" +
+      "<p>" + value.fooditems  + "</p>" +
+      "<p>" + 'Monday:' + value["schedule:Monday"]  + "<br/>" +
+      'Tuesday:' + value["schedule:Tuesday"]  + "<br/>" +
+      'Wednesday:' + value["schedule:Wednesday"]  + "<br/>" +
+      'Thursday:' + value["schedule:Thursday"]  + "<br/>" +
+      'Friday:' + value["schedule:Thursday"]  + "<br/>" +
+      'Saturday:' + value["schedule:Saturday"]  + "<br/>" +
+      'Sunday:' + value["schedule:Sunday"]  + "</p>" +
+      '</div>'
+    });
+    infowindow.open(mapContext.map, marker);
+    });
+
+markers.push(marker);
+
+                      });
+
+                    });
+
+                    //alert(apiUrl);
+                }
+            });
+        </script>
+   </div>
+</body>
+
+</html>

@@ -1,0 +1,1 @@
+Simple swagger ui documentation

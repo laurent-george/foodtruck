@@ -1,2 +1,2 @@
-*/1 * * * * /src/update_db.sh >> /var/log/populate_db.log
+* */1 * * * /src/update_db.sh >> /var/log/populate_db.log
 

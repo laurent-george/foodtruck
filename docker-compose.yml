@@ -1,16 +1,5 @@
-version: '3'
+version: '2'
 services:
-#    nginx:
-#        image: nginx:latest
-#        container_name: nginx0
-#        ports:
-#            - "8000:8000"
-#        volumes:
-#            - ./api-server:/api-server
-#            - ./web-app:/web-app
-#            - ./config/nginx:/etc/nginx/conf.d
-#        depends_on:
-#            - web
     gunicorn:
         image: foodtruck_api
         build:
@@ -20,8 +9,8 @@ services:
             - redis
         ports:
             - "8000:8000"
-#        volumes:
-#            - ./api-server/:/src
+        volumes:
+            - ./api-server/:/src
     cron:
         image: foodtruck_cron
         build:
@@ -33,3 +22,26 @@ services:
         image: "redis:alpine"
         ports:
             - "6379:6379"
+
+
+    nginx:
+        build: docker/nginx/
+        container_name: ng01
+        ports:
+            - "80:80"
+        depends_on:
+            - gunicorn
+        volumes:
+            - ./web-app/:/usr/share/nginx/html
+
+    test:
+        image: foodtruck_test
+        build:
+            context: .
+            dockerfile: ./docker/pyresttest/Dockerfile
+        depends_on:
+            - nginx
+        volumes:
+            - ./api-server/tests/:/tests/
+        command: sh -c "sleep 10 ; pyresttest http://nginx:80 integration/httpbin.yaml"
+
